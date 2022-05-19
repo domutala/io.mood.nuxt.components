@@ -1,0 +1,288 @@
+@import "~/mood/style/index.scss";
+
+.nbutton2 {
+  height: $btn-size;
+  min-width: $btn-size;
+  padding: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 0.3em;
+  border: 0;
+  position: relative;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+
+  > *:not(.before, .after, :nth-child(3), .over) {
+    margin-left: 5px;
+  }
+
+  > .before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    z-index: -2;
+  }
+
+  > .after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    z-index: -1;
+    background-color: rgba(var(--black), 0.01);
+    background-color: rgba(var(--white), 0.3);
+    opacity: 0;
+  }
+
+  > .over {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    z-index: 10;
+
+    > .loading {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: inherit;
+      background-color: rgba(var(--black), 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  // color
+  color: rgba(var(--white), 1);
+  .before {
+    background-color: rgba(var(--primary), 1);
+  }
+
+  &.transparent,
+  &.shine,
+  &.border {
+    color: rgba(var(--primary), 1);
+  }
+
+  // danger
+  &.danger {
+    > .before {
+      background-color: rgba(var(--danger), 1);
+    }
+
+    &.transparent,
+    &.shine,
+    &.border {
+      color: rgba(var(--danger), 1);
+    }
+  }
+
+  // success
+  &.success {
+    > .before {
+      background-color: rgba(var(--success), 1);
+    }
+
+    &.transparent,
+    &.shine,
+    &.border {
+      color: rgba(var(--success), 1);
+    }
+  }
+
+  // success
+  &.warning {
+    > .before {
+      background-color: rgba(var(--warning), 1);
+    }
+
+    &.transparent,
+    &.shine,
+    &.border {
+      color: rgba(var(--warning), 1);
+    }
+  }
+
+  // dark
+  &.dark {
+    color: rgba(var(--light), 1);
+
+    > .before {
+      background-color: rgba(var(--dark), 1);
+    }
+
+    &.transparent,
+    &.shine,
+    &.border {
+      color: rgba(var(--dark), 1);
+    }
+  }
+
+  // light
+  &.light {
+    color: rgba(var(--dark), 1);
+
+    > .before {
+      background-color: rgba(var(--light), 1);
+    }
+
+    &.transparent,
+    &.shine,
+    &.border {
+      color: rgba(var(--dark), 1);
+    }
+  }
+
+  // black
+  &.black {
+    color: rgba(var(--white), 1);
+
+    > .before {
+      background-color: rgba(var(--black), 1);
+    }
+
+    &.transparent,
+    &.shine,
+    &.border {
+      color: rgba(var(--black), 1);
+    }
+  }
+
+  // white
+  &.white {
+    color: rgba(var(--black), 1);
+
+    > .before {
+      background-color: rgba(var(--white), 1);
+    }
+
+    &.transparent,
+    &.shine,
+    &.border {
+      color: rgba(var(--black), 1);
+    }
+  }
+
+  &.white,
+  &.shine {
+    > .after {
+      background-color: rgba(var(--black), 0.03);
+    }
+  }
+
+  &.light,
+  &.transparent,
+  &.border {
+    > .after {
+      background-color: rgba(var(--black), 0.3);
+    }
+  }
+
+  // end color
+
+  // border
+  &.border {
+    > .before {
+      background-color: transparent;
+      border: 2px solid;
+    }
+  }
+
+  // shine
+  &.shine {
+    > .before {
+      opacity: 0.2;
+    }
+
+    &:hover {
+      > .before {
+        opacity: 0.3;
+      }
+    }
+  }
+
+  // transparent
+  &.transparent {
+    > .before {
+      opacity: 0;
+    }
+  }
+
+  &:hover {
+    > .after {
+      opacity: 1;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: default;
+
+    > .after {
+      display: none;
+    }
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  // radius
+  &.circle {
+    border-radius: 16em;
+  }
+  &.round {
+    border-radius: 0.9em;
+  }
+  &.square {
+    border-radius: 0;
+  }
+  // end radius
+
+  // size
+  &.sm {
+    height: calc($btn-size * 0.8);
+    min-width: calc($btn-size * 0.8);
+    font-size: 86%;
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+
+  &.xs {
+    height: calc($btn-size * 0.55);
+    min-width: calc($btn-size * 0.55);
+    font-size: 70%;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  &.lg {
+    height: calc($btn-size * 1.5);
+    min-width: calc($btn-size * 1.5);
+    font-size: 120%;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  // en size
+
+  &.block {
+    display: block;
+    width: 100%;
+  }
+  &.icon {
+    justify-content: center;
+    padding: 0;
+  }
+}

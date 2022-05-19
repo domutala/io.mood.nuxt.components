@@ -1,0 +1,40 @@
+svg {
+  fill: rgba(var(--dark), 1);
+}
+
+a {
+  color: inherit;
+}
+
+i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-position: center;
+  object-fit: cover;
+}
+
+button {
+  background-color: transparent;
+  border: 0;
+  outline: none;
+}
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+::selection {
+  color: rgba(var(--light), 1);
+  background: rgba(var(--primary), 1);
+}
+
+* {
+  outline: none;
+}

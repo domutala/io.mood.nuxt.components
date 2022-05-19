@@ -1,0 +1,17 @@
+svg {
+  fill: rgba(var(--dark), 1);
+
+  .fill-primary {
+    fill: rgba(var(--primary), 1);
+  }
+
+  &.transparent-primary {
+    .fill-primary {
+      fill: transparent;
+    }
+  }
+
+  &.transparent-default {
+    fill: transparent;
+  }
+}

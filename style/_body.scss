@@ -1,0 +1,16 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 14px !important;
+  line-height: 1.2 !important;
+  font-family: "Inter", sans-serif;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  color: rgba(var(--dark), 1);
+  position: relative;
+
+  background-color: rgba(var(--light), 1);
+
+  // @media (max-width: $xs-screen) {
+  //   background-color: rgba(var(--light), 1);
+  // }
+}

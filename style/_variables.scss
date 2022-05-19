@@ -1,0 +1,16 @@
+$md-screen: 992px;
+$sm-screen: 772px;
+$xs-screen: 442px;
+
+$menu-width: 60px;
+$btn-size: 36px;
+
+:root {
+  --md-screen: #{$md-screen};
+  --sm-screen: #{$sm-screen};
+  --xs-screen: #{$xs-screen};
+
+  --menu-width: #{$menu-width};
+
+  --btn-size: #{$btn-size};
+}
