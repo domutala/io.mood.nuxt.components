@@ -1,11 +1,11 @@
 import { Component, Prop } from "vue-property-decorator";
-import { CreateElement } from "vue/types/umd";
+import { CreateElement, VNode } from "vue";
 import { Base } from "..";
 
 import "./style.scss";
 
 @Component
-export default class extends Base {
+export default class NPopupBase extends Base {
   @Prop({ type: Boolean, default: true }) closeOnBack!: boolean;
   @Prop({ type: Boolean, default: true }) closeOnEsc!: boolean;
   @Prop({ type: Boolean, default: false }) disabledBack!: boolean;
@@ -18,8 +18,12 @@ export default class extends Base {
 
   popupClicked = false;
 
+  template(h: CreateElement, other?: VNode) {
+    return h("div", { staticClass: "npopup2" }, [other || this.$slots.default]);
+  }
+
   render(h: CreateElement) {
-    return h("div", { staticClass: "npopup2" }, [this.$slots.default]);
+    return this.template(h);
   }
 
   mounted() {
@@ -31,7 +35,7 @@ export default class extends Base {
   }
 
   init() {
-    const key = `[${this.$attr}] > *`;
+    const key = `[${this.mdattr}] > *`;
 
     const children = this.$el.querySelectorAll(key);
     if (children.length !== 1) {
@@ -41,11 +45,11 @@ export default class extends Base {
 
     if (this.disabledBack) this.$el.setAttribute("disabled-back", "");
 
-    this.$el.setAttribute("popup", this.$attr);
+    this.$el.setAttribute("popup", this.mdattr);
 
     setTimeout(() => {
       window.addEventListener("keydown", this.onEscPress);
-      window.addEventListener(`close-popup-${this.$attr}`, this.onBackClick);
+      window.addEventListener(`close-popup-${this.mdattr}`, this.onBackClick);
     }, 100);
 
     const body = document.querySelector("body") as HTMLElement;
@@ -59,7 +63,7 @@ export default class extends Base {
   }
 
   setPopup() {
-    const key = `[${this.$attr}] > :nth-child(1)`;
+    const key = `[${this.mdattr}] > :nth-child(1)`;
     const popup = this.$el.querySelector(key) as HTMLDivElement;
     if (!popup) return;
 

@@ -1,5 +1,5 @@
 import { Component, Prop } from "nuxt-property-decorator";
-import { CreateElement } from "vue";
+import { CreateElement, VNode } from "vue";
 import { Base } from "..";
 
 import "./style.scss";
@@ -14,22 +14,25 @@ export default class NInputBase extends Base {
   @Prop({ type: Boolean, default: false }) warning!: boolean;
 
   @Prop({ type: Boolean, default: false }) required!: boolean;
+  @Prop({ type: Boolean, default: false }) readonly!: boolean;
   @Prop({ type: String }) name!: string;
   @Prop({ type: String }) id!: string;
+
+  // radius
+  @Prop({ type: Boolean, default: false }) circle!: boolean;
+  @Prop({ type: Boolean, default: false }) round!: boolean;
+  @Prop({ type: Boolean, default: false }) square!: boolean;
 
   isFocus = false;
 
   get isCon() {
+    if (Array.isArray(this.value)) return this.value.length !== 0;
     if (typeof this.value === "string") return this.value.length !== 0;
-
+    if (this.value === null) return false;
     return typeof this.value !== "undefined";
   }
 
-  template(h: CreateElement) {
-    return h("");
-  }
-
-  render(h: CreateElement) {
+  template(h: CreateElement, others?: VNode, slot?: string) {
     return h(
       "div",
       {
@@ -41,14 +44,20 @@ export default class NInputBase extends Base {
           error: this.error,
           success: this.success,
           warning: this.warning,
+
+          // radius
+          circle: this.circle,
+          square: this.square,
+          round: this.round,
         },
+        slot,
       },
       [
         h("div", { staticClass: "over" }, [
           this.$slots.before,
           h("div", { staticClass: "in" }, [
             h("div", { class: "placeholder" }, this.placeholder),
-            this.template(h),
+            others,
             this.$slots.default,
           ]),
           this.$slots.after,
@@ -56,6 +65,10 @@ export default class NInputBase extends Base {
         h("div", { staticClass: "info" }, [this.$slots.info]),
       ]
     );
+  }
+
+  render(h: CreateElement) {
+    return this.template(h);
   }
 
   mounted() {

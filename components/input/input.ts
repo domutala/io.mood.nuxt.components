@@ -6,30 +6,44 @@ import NInputBase from "./base";
 export default class NInput extends NInputBase {
   @Prop({ type: String, default: "text" }) type!: string;
 
-  template(h: CreateElement) {
-    return h("input", {
-      attrs: {
-        type: this.type,
-        required: this.required,
-        name: this.name,
-        id: this.id,
+  get onListeners() {
+    return {
+      ...this.listeners,
+      input: (event: any) => {
+        this.$emit("input", event.target.value);
       },
-      ref: "input",
-    });
+    };
+  }
+
+  render(h: CreateElement) {
+    return this.template(
+      h,
+      h("input", {
+        attrs: {
+          type: this.type,
+          required: this.required,
+          readonly: this.readonly,
+          name: this.name,
+          id: this.id,
+        },
+        ref: "input",
+        on: this.onListeners,
+      })
+    );
   }
 
   mounted() {
     this.onValue();
 
-    setTimeout(() => {
-      const input = this.$refs.input as HTMLInputElement;
-      if (!input) return;
+    // setTimeout(() => {
+    //   const input = this.$refs.input as HTMLInputElement;
+    //   if (!input) return;
 
-      input.addEventListener("input", this.onInput);
-    }, 100);
+    //   // input.addEventListener("input", this.onInput);
+    // }, 100);
   }
 
-  onInput(ev: any) {
+  onInpute(ev: any) {
     this.$emit("input", ev.target.value);
   }
 
@@ -38,6 +52,6 @@ export default class NInput extends NInputBase {
     const input = this.$refs.input as HTMLInputElement;
     if (!input) return;
 
-    input.value = this.value;
+    input.value = typeof this.value !== "undefined" ? this.value : "";
   }
 }

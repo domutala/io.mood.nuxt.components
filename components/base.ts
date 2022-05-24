@@ -2,7 +2,7 @@ import { Vue, Component } from "vue-property-decorator";
 
 @Component
 export default class Base extends Vue {
-  $attr = "";
+  mdattr = "";
 
   get listeners() {
     return {
@@ -76,17 +76,39 @@ export default class Base extends Vue {
     };
   }
 
-  mounted() {
-    this.$attr = this.$nuxt.context.$utils.token.generate({ length: 8 });
-    this.$attr = `data-md-${this.$attr}`;
+  beforeMount() {
+    this.mdattr = this.$nuxt.context.$utils.token.generate({ length: 8 });
+    this.mdattr = `data-md-${this.mdattr}`;
+  }
 
+  mounted() {
     if (typeof this.$el.setAttribute === "function") {
-      this.$el.setAttribute(this.$attr, "");
+      this.$el.setAttribute(this.mdattr, "");
     }
+
+    this.$$init();
   }
 
   popupCloser() {
-    const ev = new CustomEvent("close-popup");
+    this.$$popupCloser();
+  }
+
+  $$init() {}
+
+  $$popupCloser() {
+    this.emitEvent("close-popup");
+  }
+
+  emitEvent(name: string, detail?: any) {
+    this.$$emit(name, detail);
+  }
+
+  emit(name: string, detail?: any) {
+    this.$$emit(name, detail);
+  }
+
+  $$emit(name: string, detail?: any) {
+    const ev = new CustomEvent(name, { detail });
     window.dispatchEvent(ev);
   }
 }

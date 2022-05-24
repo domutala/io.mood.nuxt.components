@@ -1,62 +1,5 @@
 <template>
   <div class="ndate">
-    <!-- <div v-if="open_selecter" class="calc" @click="open_selecter = false"></div>
-    <div class="selecter" :class="{ open: open_selecter }">
-      <div class="bottom">
-        <div ref="monthSelecter" class="toscroll">
-          <div v-for="(mt2, m2) in months2" :key="m2">
-            <div v-for="(mt, m) in mt2" :key="`${m2}${m}`">
-              <button
-                :class="{ current: mt === month_selecter }"
-                @click="month_selecter = mt"
-              >
-                {{ months[mt] }}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="tonav">
-          <button @click="select_scroller('monthSelecter', -1)">
-            <i class="fi fi-sr-angle-up"></i>
-          </button>
-          <button @click="select_scroller('monthSelecter', 1)">
-            <i class="fi fi-sr-angle-down"></i>
-          </button>
-        </div>
-      </div>
-
-      <div class="bottom">
-        <div ref="yearSelecter" class="toscroll">
-          <div v-for="(yr2, y2) in years2" :key="y2">
-            <div v-for="(yr, y) in yr2" :key="`${y2}${y}`">
-              <button
-                class="yr"
-                :class="{ current: yr === year_selecter }"
-                @click="year_selecter = yr"
-              >
-                {{ yr }}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="tonav">
-          <button @click="select_scroller('yearSelecter', -1)">
-            <i class="fi fi-sr-angle-up"></i>
-          </button>
-          <button @click="select_scroller('yearSelecter', 1)">
-            <i class="fi fi-sr-angle-down"></i>
-          </button>
-        </div>
-      </div>
-
-      <div class="top">
-        <div @click="open_selecter = false">Annuler</div>
-        <div @click="valid_selecter">ok</div>
-      </div>
-    </div> -->
-
     <div class="header">
       <button @click="go_next_or_prev_month(-1)">
         <i class="fi fi-sr-angle-left"></i>
@@ -118,7 +61,8 @@
 
 <script lang="ts">
 import moment, { weekdays, months } from "moment";
-import { Vue, Component, Prop, Watch } from "vue-property-decorator";
+import { Component, Prop, Watch } from "vue-property-decorator";
+import Base from "../base";
 
 type MyDate = {
   date: moment.Moment;
@@ -128,7 +72,7 @@ type MyDate = {
 };
 
 @Component
-export default class extends Vue {
+export default class NDateBase extends Base {
   @Prop({ type: Date, default: () => moment().toDate() })
   value!: Date;
 
@@ -169,22 +113,19 @@ export default class extends Vue {
   }
 
   mounted() {
-    this.init();
+    this.start();
   }
 
   beforeDestroy() {
     window.removeEventListener("resize", this.build_graph);
-    // window.removeEventListener("resize", this.build_graph2);
   }
 
-  init() {
+  start() {
     this.build_graph();
-    // this.build_graph2();
     window.addEventListener("resize", this.build_graph);
-    // window.addEventListener("resize", this.build_graph2);
 
     this.build0(moment(this.value));
-    this.initDrag();
+    this.startDrag();
   }
 
   submit(mydate: MyDate) {
@@ -208,40 +149,6 @@ export default class extends Vue {
     if (parent) {
       this.carret = parent.offsetWidth / 7;
     }
-  }
-
-  build_graph2() {
-    const monthSelecter = this.$refs.monthSelecter as HTMLDivElement;
-    let b = monthSelecter.offsetWidth / 70;
-    b = Number(b.toString().split(".")[0]);
-    let c = b;
-
-    while (c < this.months.length + 1) {
-      const t = [];
-      for (let j = c - b; j < c; j++) t.push(j);
-      this.months2.push(t);
-
-      c += b;
-      if (c > this.months.length + 1) c = this.months.length + 1;
-    }
-
-    // year
-    const len = 200;
-    const yearSelecter = this.$refs.yearSelecter as HTMLDivElement;
-    let q = yearSelecter.offsetWidth / 45;
-    q = Number(q.toString().split(".")[0]);
-    let r = q;
-
-    while (r < len + 1) {
-      const t = [];
-      for (let j = r - q; j < r; j++) t.push(j + 1900);
-      this.years2.push(t);
-
-      r += q;
-      if (r > len + 1) r = len + 1;
-    }
-
-    setTimeout(this.req_scroll_selecter, 500);
   }
 
   build0(date: moment.Moment) {
@@ -413,7 +320,7 @@ export default class extends Vue {
   }
 
   // drag
-  initDrag() {
+  startDrag() {
     const content = this.$refs.content as HTMLDivElement;
     content.addEventListener("mousedown", this.onDragStart);
     content.addEventListener("mousemove", this.onDrag);

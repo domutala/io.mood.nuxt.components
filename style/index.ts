@@ -28,7 +28,8 @@ const plugin: Plugin = (context) => {
     if (t === "dark") ts = ts.reverse();
 
     // 242, 242, 242
-    const surface = ["246, 248, 250", "22, 27, 34"][t === "dark" ? 1 : 0];
+    const surfaces = ["246, 248, 250", "22, 27, 34", "250, 250, 250"];
+    const surface = surfaces[t === "dark" ? 1 : 2];
 
     const bxcolor = ["rgba(100, 100, 111, 0.2)", "rgba(0, 0, 0, 0.69)"][
       t === "dark" ? 1 : 0

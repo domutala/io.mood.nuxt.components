@@ -4,7 +4,7 @@ import { Base } from "..";
 
 @Component
 export default class NSwitech extends Base {
-  @Prop({ type: String, default: "rgba(var(--primary), 1)" }) color!: string;
+  @Prop({ type: String, default: "" }) color!: string;
   @Prop({ default: 22 }) size!: any;
   @Prop({ type: Boolean, default: false }) light!: boolean;
 

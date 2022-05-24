@@ -1,31 +1,29 @@
 <template>
-  <div class="ndropper">
-    <slot name="button" />
-
-    <n-popup
-      v-if="openned"
-      v-show="showed"
-      ref="fake"
-      class="ndropper-popup arrow-top"
-      disabled-back
-      @close="closer"
-    >
-      <div ref="popup" class="dropper-popup" :class="{ square }">
-        <span v-show="showSpin" ref="spin" class="spin"></span>
-        <div ref="content" class="content">
-          <slot />
-        </div>
+  <n2-popup
+    v-if="openned"
+    v-show="showed"
+    class="ndropper-popup arrow-top"
+    disabled-back
+    @close="closer"
+  >
+    <div ref="popup" class="dropper-popup" :class="{ square }">
+      <span v-show="showSpin" ref="spin" class="spin"></span>
+      <div ref="content" class="content">
+        <slot />
       </div>
-    </n-popup>
-  </div>
+    </div>
+  </n2-popup>
 </template>
 
 <script lang="ts">
 import { Component, Prop } from "vue-property-decorator";
-import { Base } from "~/mood/components";
+import { Base } from "..";
 
 @Component
 export default class extends Base {
+  @Prop({ type: String, required: true })
+  parent!: string;
+
   @Prop({ type: [String, Array], default: "click" })
   events!: string | string[];
 
@@ -46,26 +44,22 @@ export default class extends Base {
   }
 
   init() {
-    const key = `[${this.$attr}] > *`;
-    const children = this.$el.querySelectorAll(key);
-    if (children.length !== 1) {
-      const message = "Dropper component requires exactly one element.";
-      const error = new Error(message);
-      throw error;
-    }
+    setTimeout(() => {
+      if (this.$slots.default && this.$slots.default?.length > 1) {
+        const message = "Dropper component requires exactly one element.";
+        const error = new Error(message);
+        throw error;
+      }
 
-    this.uid = this.$nuxt.context.$utils.token.generate();
+      this.uid = this.$nuxt.context.$utils.token.generate();
 
-    const button = this.$el as HTMLDivElement;
-    const events = Array.isArray(this.events) ? this.events : [this.events];
-
-    window.addEventListener("resize", this.rebuild);
-
-    for (const event of events) {
-      button.addEventListener(event, () => {
-        this.toOpen();
-      });
-    }
+      const button = document.querySelector(this.parent) as HTMLDivElement;
+      if (button) {
+        const events = Array.isArray(this.events) ? this.events : [this.events];
+        window.addEventListener("resize", this.rebuild);
+        for (const event of events) button.addEventListener(event, this.toOpen);
+      }
+    }, 100);
   }
 
   rebuild() {
@@ -82,8 +76,9 @@ export default class extends Base {
 
     setTimeout(() => {
       // const popup = this.$refs.popup as HTMLDivElement;
-      const button = this.$el as HTMLDivElement;
+      const button = document.querySelector(this.parent) as HTMLDivElement;
       const rect = button.getBoundingClientRect();
+
       const popup = this.$refs.popup as HTMLDivElement;
       const content = this.$refs.content as HTMLDivElement;
 
@@ -150,6 +145,13 @@ export default class extends Base {
   }
 
   beforeDestroy() {
+    const button = document.querySelector(this.parent) as HTMLDivElement;
+    if (button) {
+      const events = Array.isArray(this.events) ? this.events : [this.events];
+      for (const event of events)
+        button.removeEventListener(event, this.toOpen);
+    }
+
     window.removeEventListener("resize", this.rebuild);
     this.closer();
   }
