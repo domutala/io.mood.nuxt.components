@@ -2,14 +2,14 @@
   <div class="ndate">
     <div class="header">
       <button @click="go_next_or_prev_month(-1)">
-        <i class="fi fi-sr-angle-left"></i>
+        <n2-svg svg="chevron-left" />
       </button>
       <div class="current" @click="open_selecter = true">
         {{ months[month] }}
         {{ year }}
       </div>
       <button @click="go_next_or_prev_month(1)">
-        <i class="fi fi-sr-angle-right"></i>
+        <n2-svg svg="chevron-right" />
       </button>
     </div>
     <div class="group" :style="{ width: `${carret * 7}px` }">
